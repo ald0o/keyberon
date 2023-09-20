@@ -170,12 +170,13 @@ where
 
 /// Define one shot key behaviour.
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
-pub struct OneShot<T = core::convert::Infallible>
+pub struct OneShot<T, K>
 where
     T: 'static,
+    K: 'static,
 {
     /// Action to activate until timeout expires or exactly one non-one-shot key is activated.
-    pub action: &'static Action<T>,
+    pub action: &'static Action<T, K>,
     /// Timeout after which one shot will expire. Note: timeout will be overwritten if another
     /// one shot key is pressed.
     pub timeout: u16,
@@ -244,7 +245,7 @@ where
     /// action) then you will likely have undesired behaviour. E.g. one shot with the space
     /// key will hold space until either another key is pressed or the timeout occurs, which will
     /// probably send many undesired space characters to your active application.
-    OneShot(&'static OneShot<T>),
+    OneShot(&'static OneShot<T, K>),
 }
 impl<T, K: Clone> Action<T, K> {
     /// Gets the layer number if the action is the `Layer` action.
